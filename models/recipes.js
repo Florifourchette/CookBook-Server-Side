@@ -15,22 +15,9 @@ const getRecipe = async (req, res) => {
   res.json(recipes);
 };
 
-/* const createRecipe = async (req, res) => {
-  const {
-    id,
-    recipetitle,
-    shortdescription,
-    longdescription,
-    recipepicture,
-    steps,
-    ingredient,
-    vegan,
-  } = req.body;
-  if (!title) return res.json({ error: "missing data" });
-
-  const { rows: recipes } = await pool.query(
-    "INSERT INTO users (id, recipetitle, shortdescription, longdescription, recipepicture, steps, ingredient, vegan) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
-    [
+const createRecipe = async (req, res) => {
+  try {
+    const {
       id,
       recipetitle,
       shortdescription,
@@ -39,18 +26,34 @@ const getRecipe = async (req, res) => {
       steps,
       ingredient,
       vegan,
-    ]
-  );
-  res.status(201).json(recipes);
-}; */
+    } = req.body;
+
+    const { rows: recipes } = await pool.query(
+      "INSERT INTO recipes (id, recipetitle, shortdescription, longdescription, recipepicture, steps, ingredient, vegan) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+      [
+        id,
+        recipetitle,
+        shortdescription,
+        longdescription,
+        recipepicture,
+        steps,
+        ingredient,
+        vegan,
+      ] //pg module checks the values
+    );
+    res.status(201).json(recipes);
+  } catch (e) {
+    res.json({ error: e.message });
+  }
+};
 
 const deleteRecipe = async (req, res) => {
   const { id } = req.params;
-  const { rows: recipes } = await pool.query(
+  const { rows: recipes } = await pool.query( //await replacement for dot then
     "DELETE FROM recipes WHERE id = $1",
     [id]
   );
   res.json(recipes);
 };
 
-export { getRecipes, getRecipe, deleteRecipe };
+export { getRecipes, createRecipe, getRecipe, deleteRecipe };
