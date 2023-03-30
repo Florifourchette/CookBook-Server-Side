@@ -15,4 +15,33 @@ const getRecipe = async (req, res) => {
   res.json(recipes);
 };
 
+/* const createRecipe = async (req, res) => {
+  const {
+    id,
+    recipetitle,
+    shortdescription,
+    longdescription,
+    recipepicture,
+    steps,
+    ingredient,
+    vegan,
+  } = req.body;
+  if (!title) return res.json({ error: "missing data" });
+
+  const { rows: recipes } = await pool.query(
+    "INSERT INTO users (id, recipetitle, shortdescription, longdescription, recipepicture, steps, ingredient, vegan) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+    [
+      id,
+      recipetitle,
+      shortdescription,
+      longdescription,
+      recipepicture,
+      steps,
+      ingredient,
+      vegan,
+    ]
+  );
+  res.status(201).json(recipes);
+}; */
+
 export { getRecipes, getRecipe };
