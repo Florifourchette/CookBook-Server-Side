@@ -1,18 +1,26 @@
 import pool from "../database/pg.js";
 
 const getRecipes = async (req, res) => {
-  const { rows: recipes } = await pool.query("SELECT * FROM recipes");
-  res.json(recipes);
+  try {
+    const { rows: recipes } = await pool.query("SELECT * FROM recipes");
+    res.json(recipes);
+  } catch (e) {
+    return console.log(e.message);
+  }
 };
 
 const getRecipe = async (req, res) => {
-  const { id } = req.params;
-  console.log(id);
-  const { rows: recipes } = await pool.query(
-    "SELECT * FROM recipes WHERE id = $1",
-    [id]
-  );
-  res.json(recipes);
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const { rows: recipes } = await pool.query(
+      "SELECT * FROM recipes WHERE id = $1",
+      [id]
+    );
+    return res.json(recipes);
+  } catch (e) {
+    console.log(e.message);
+  }
 };
 
 /* const createRecipe = async (req, res) => {
@@ -45,12 +53,16 @@ const getRecipe = async (req, res) => {
 }; */
 
 const deleteRecipe = async (req, res) => {
-  const { id } = req.params;
-  const { rows: recipes } = await pool.query(
-    "DELETE FROM recipes WHERE id = $1",
-    [id]
-  );
-  res.json(recipes);
+  try {
+    const { id } = req.params;
+    const { rows: recipes } = await pool.query(
+      "DELETE FROM recipes WHERE id = $1",
+      [id]
+    );
+    return res.json(recipes);
+  } catch (e) {
+    console.log(e.message);
+  }
 };
 
 export { getRecipes, getRecipe, deleteRecipe };
