@@ -4,6 +4,7 @@ import categoriesRoutes from "./controllers/categories.js";
 import cors from "cors";
 import pkg from "pg";
 
+
 const port = 8001;
 
 const app = Express();
