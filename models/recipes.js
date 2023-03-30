@@ -26,7 +26,6 @@ const getRecipe = async (req, res) => {
 const createRecipe = async (req, res) => {
   try {
     const {
-      id,
       recipetitle,
       shortdescription,
       longdescription,
@@ -36,10 +35,9 @@ const createRecipe = async (req, res) => {
       vegan,
     } = req.body;
 
-    const { rows: recipes } = await pool.query(
-      "INSERT INTO recipes (id, recipetitle, shortdescription, longdescription, recipepicture, steps, ingredient, vegan) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+    const { rows: newRecipe } = await pool.query(
+      "INSERT INTO recipes (recipetitle, shortdescription, longdescription, recipepicture, steps, ingredient, vegan) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
       [
-        id,
         recipetitle,
         shortdescription,
         longdescription,
@@ -49,7 +47,7 @@ const createRecipe = async (req, res) => {
         vegan,
       ] //pg module checks the values
     );
-    res.status(201).json(recipes);
+    res.status(201).json(newRecipe);
   } catch (e) {
     res.json({ error: e.message });
   }
