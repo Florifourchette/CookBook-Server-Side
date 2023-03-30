@@ -4,7 +4,6 @@ import categoriesRoutes from "./controllers/categories.js";
 import cors from "cors";
 import pkg from "pg";
 
-
 const port = 8001;
 
 const app = Express();
@@ -21,6 +20,8 @@ app.use((error, req, res, next) => {
     "RECIPE_INVALID_ENTRIES",
     "RECIPE_NOT_DELETED",
     "RECIPE_NOT_UPDATED",
+    "RECIPES_IN_CATEGORY_NOT_FOUND",
+    "CATEGORY_NOT_FOUND",
   ];
 
   if (errorMessages.includes(error)) {
@@ -29,7 +30,6 @@ app.use((error, req, res, next) => {
         res.status(404).json("We could not find what you were looking for");
         break;
       case "RECIPE_INVALID_ENTRIES":
-        console.log(error.message);
         res.status(400).json("Invalid entries");
         break;
       case "RECIPE_NOT_DELETED":
@@ -37,6 +37,12 @@ app.use((error, req, res, next) => {
         break;
       case "RECIPE_NOT_UPDATED":
         res.status(400).json("Wrong input, please modify");
+        break;
+      case "CATEGORY_NOT_FOUND":
+        res.status(400).json("We cannot show you what you are waiting for 😥");
+        break;
+      case "RECIPES_IN_CATEGORY_NOT_FOUND":
+        res.status(404).json("We could not find any recipes for this category");
         break;
       default:
         res.status(500).json("Contact administrator");

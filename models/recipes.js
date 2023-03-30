@@ -5,7 +5,8 @@ const getRecipes = async (req, res, next) => {
     const { rows: recipes } = await pool.query("SELECT * FROM recipes");
     return res.json(recipes);
   } catch (error) {
-    return next((error.message = "RECIPE_NOT_FOUND"));
+    console.log(error.message);
+    return next("RECIPE_NOT_FOUND");
   }
 };
 
@@ -19,7 +20,8 @@ const getRecipe = async (req, res, next) => {
     );
     return res.json(recipes);
   } catch (error) {
-    return next((error.message = "RECIPE_NOT_FOUND"));
+    console.log(error.message);
+    return next("RECIPE_NOT_FOUND");
   }
 };
 
@@ -59,7 +61,8 @@ const createRecipe = async (req, res, next) => {
     );
     return res.status(201).json(newRecipe);
   } catch (error) {
-    return next((error.message = "RECIPE_INVALID_ENTRIES"));
+    console.log(error.message);
+    return next("RECIPE_INVALID_ENTRIES");
   }
 };
 
@@ -73,8 +76,44 @@ const deleteRecipe = async (req, res, next) => {
     );
     return res.json(recipes);
   } catch (error) {
-    return next((error.message = "RECIPE_NOT_DELETED"));
+    console.log(error.message);
+    return next("RECIPE_NOT_DELETED");
   }
 };
 
-export { getRecipes, createRecipe, getRecipe, deleteRecipe };
+const editRecipe = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      recipetitle,
+      shortdescription,
+      longdescription,
+      recipepicture,
+      steps,
+      ingredient,
+      vegan,
+    } = req.body;
+    const {
+      rows: [recipe],
+    } = await pool.query(
+      "UPDATE recipes SET recipetitle=$2, shortdescription=$3, longdescription=$4, recipepicture=$5, steps=$6, ingredient=$7, vegan=$8 WHERE id=$1 RETURNING *",
+      [
+        id,
+        recipetitle,
+        shortdescription,
+        longdescription,
+        recipepicture,
+        steps,
+        ingredient,
+        vegan,
+      ]
+    );
+  } catch (error) {
+    console.log(error.message);
+    return next("RECIPE_NOT_UPDATED");
+  }
+
+  res.json({ recipe });
+};
+
+export { getRecipes, getRecipe, deleteRecipe, editRecipe, createRecipe };
