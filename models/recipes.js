@@ -44,4 +44,13 @@ const getRecipe = async (req, res) => {
   res.status(201).json(recipes);
 }; */
 
-export { getRecipes, getRecipe };
+const deleteRecipe = async (req, res) => {
+  const { id } = req.params;
+  const { rows: recipes } = await pool.query(
+    "DELETE FROM recipes WHERE id = $1",
+    [id]
+  );
+  res.json(recipes);
+};
+
+export { getRecipes, getRecipe, deleteRecipe };
