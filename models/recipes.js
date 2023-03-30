@@ -2,7 +2,9 @@ import pool from "../database/pg.js";
 
 const getRecipes = async (req, res, next) => {
   try {
-    const { rows: recipes } = await pool.query("SELECT * FROM recipes");
+    const { rows: recipes } = await pool.query(
+      "SELECT * FROM recipes WHERE active=true"
+    );
     return res.json(recipes);
   } catch (error) {
     console.log(error.message);
@@ -15,7 +17,7 @@ const getRecipe = async (req, res, next) => {
     const { id } = req.params;
     console.log(id);
     const { rows: recipes } = await pool.query(
-      "SELECT * FROM recipes WHERE id = $1",
+      "SELECT * FROM recipes WHERE id = $1, active=true",
       [id]
     );
     return res.json(recipes);
@@ -48,7 +50,7 @@ const createRecipe = async (req, res, next) => {
     }
 
     const { rows: newRecipe } = await pool.query(
-      "INSERT INTO recipes (recipetitle, shortdescription, longdescription, recipepicture, steps, ingredient, vegan) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+      "INSERT INTO recipes (recipetitle, shortdescription, longdescription, recipepicture, steps, ingredient, vegan, active) VALUES ($1, $2, $3, $4, $5, $6, $7, true) RETURNING *",
       [
         recipetitle,
         shortdescription,
@@ -70,10 +72,13 @@ const deleteRecipe = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { rows: recipes } = await pool.query(
-      //await replacement for dot then
-      "DELETE FROM recipes WHERE id = $1",
+      "UPDATE recipes SET active='false' WHERE id=$1",
       [id]
     );
+    // const { rows: recipes } = await pool.query(
+    //   "DELETE FROM recipes WHERE id = $1",
+    //   [id]
+    // );
     return res.json(recipes);
   } catch (error) {
     console.log(error.message);
