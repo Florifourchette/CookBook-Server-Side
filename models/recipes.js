@@ -17,7 +17,7 @@ const getRecipe = async (req, res, next) => {
     const { id } = req.params;
     console.log(id);
     const { rows: recipes } = await pool.query(
-      "SELECT * FROM recipes WHERE id = $1, active=true",
+      "SELECT * FROM recipes WHERE id = $1 AND active = true",
       [id]
     );
     return res.json(recipes);
