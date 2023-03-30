@@ -53,4 +53,33 @@ const deleteRecipe = async (req, res) => {
   res.json(recipes);
 };
 
-export { getRecipes, getRecipe, deleteRecipe };
+const editRecipe = async (req, res) => {
+  const { id } = req.params;
+  const {
+    recipetitle,
+    shortdescription,
+    longdescription,
+    recipepicture,
+    steps,
+    ingredient,
+    vegan,
+  } = req.body;
+  const {
+    rows: [recipe],
+  } = await pool.query(
+    "UPDATE recipes SET recipetitle=$2, shortdescription=$3, longdescription=$4, recipepicture=$5, steps=$6, ingredient=$7, vegan=$8 WHERE id=$1 RETURNING *",
+    [
+      id,
+      recipetitle,
+      shortdescription,
+      longdescription,
+      recipepicture,
+      steps,
+      ingredient,
+      vegan,
+    ]
+  );
+  res.json({ recipe });
+};
+
+export { getRecipes, getRecipe, deleteRecipe, editRecipe };
