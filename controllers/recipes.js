@@ -3,11 +3,8 @@ import {
   getRecipes,
   getRecipe,
   deleteRecipe,
-<<<<<<< HEAD
   createRecipe,
-=======
   editRecipe,
->>>>>>> main
 } from "../models/recipes.js";
 
 const recipesRoutes = Router();

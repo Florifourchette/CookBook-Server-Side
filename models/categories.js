@@ -6,7 +6,8 @@ const getCategories = async (req, res, next) => {
     const { rows: categories } = await pool.query("SELECT * FROM categories");
     res.json(categories);
   } catch (error) {
-    next((error.message = "RECIPE_NOT_FOUND"));
+    console.log(error.message);
+    next("CATEGORY_NOT_FOUND");
   }
 };
 
@@ -19,7 +20,8 @@ const getCategory = async (req, res, next) => {
     );
     return res.json(recipes);
   } catch (error) {
-    return next((error.message = "RECIPE_NOT_FOUND"));
+    console.log(error.message);
+    return next("RECIPES_IN_CATEGORY_NOT_FOUND");
   }
 };
 
