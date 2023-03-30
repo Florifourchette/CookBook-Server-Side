@@ -13,11 +13,18 @@ const getCategories = async (req, res, next) => {
 const getCategory = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { rows: recipes } = await pool.query(
-      "SELECT * FROM recipes WHERE category_id=$1",
-      [id]
-    );
-    return res.json(recipes);
+    if (id !== "undefined") {
+      const { rows: recipes2 } = await pool.query(
+        "SELECT * FROM recipes WHERE category_id=$1",
+        [id]
+      );
+      return res.json(recipes2);
+    } else if (id === "undefined") {
+      const { rows: recipes } = await pool.query("SELECT * FROM recipes");
+      return res.json(recipes);
+    } else {
+      return res.json({ error: "nothing found" });
+    }
   } catch (error) {
     return next((error.message = "RECIPE_NOT_FOUND"));
   }
