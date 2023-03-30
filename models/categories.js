@@ -67,11 +67,11 @@ const getCategory = async (req, res, next) => {
 const createCategory = async (req, res, next) => {
     try {
       const {
-        name
+        categoryName
       } = req.body;
   
       if (
-        !name
+        !categoryName
   
       ) {
         throw Error();
