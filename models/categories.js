@@ -33,45 +33,14 @@ const getCategory = async (req, res, next) => {
 };
 
 
-// const createCategory = async (req, res, next) => {
-//   try {
-//     const {
-//       name
-//     } = req.body;
-
-//     if (
-//       !name
-
-//     ) {
-//       throw Error();
-//     }
-//   }
-//   const { rows: newRecipe } = await pool.query(
-//     "INSERT INTO recipes (recipetitle, shortdescription, longdescription, recipepicture, steps, ingredient, vegan, active) VALUES ($1, $2, $3, $4, $5, $6, $7, true) RETURNING *",
-//     [
-//       recipetitle,
-//       shortdescription,
-//       longdescription,
-//       recipepicture,
-//       steps,
-//       ingredient,
-//       vegan,
-//     ] //pg module checks the values
-//   );
-//   return res.status(201).json(newRecipe);
-// } catch (error) {
-//   console.log(error.message);
-//   return next("RECIPE_INVALID_ENTRIES");
-// }
-
 const createCategory = async (req, res, next) => {
     try {
       const {
-        categoryName
+        name
       } = req.body;
   
       if (
-        !categoryName
+        !name
   
       ) {
         throw Error();

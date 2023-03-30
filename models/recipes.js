@@ -31,6 +31,7 @@ const createRecipe = async (req, res, next) => {
   try {
     const {
       recipetitle,
+      category_id,
       shortdescription,
       longdescription,
       recipepicture,
@@ -50,9 +51,10 @@ const createRecipe = async (req, res, next) => {
     }
 
     const { rows: newRecipe } = await pool.query(
-      "INSERT INTO recipes (recipetitle, shortdescription, longdescription, recipepicture, steps, ingredient, vegan, active) VALUES ($1, $2, $3, $4, $5, $6, $7, true) RETURNING *",
+      "INSERT INTO recipes (recipetitle, category_id, shortdescription, longdescription, recipepicture, steps, ingredient, vegan, active) VALUES ($1, $2, $3, $4, $5, $6, $7,$8, true) RETURNING *",
       [
         recipetitle,
+        category_id,
         shortdescription,
         longdescription,
         recipepicture,
