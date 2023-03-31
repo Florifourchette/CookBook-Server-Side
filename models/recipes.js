@@ -7,7 +7,6 @@ const getRecipes = async (req, res, next) => {
     );
     return res.json(recipes);
   } catch (error) {
-    console.log(error.message);
     return next("RECIPE_NOT_FOUND");
   }
 };
@@ -15,14 +14,12 @@ const getRecipes = async (req, res, next) => {
 const getRecipe = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log(id);
     const { rows: recipes } = await pool.query(
       "SELECT * FROM recipes WHERE id = $1 AND active = true",
       [id]
     );
     return res.json(recipes);
   } catch (error) {
-    console.log(error.message);
     return next("RECIPE_NOT_FOUND");
   }
 };
@@ -65,7 +62,6 @@ const createRecipe = async (req, res, next) => {
     );
     return res.status(201).json(newRecipe);
   } catch (error) {
-    console.log(error.message);
     return next("RECIPE_INVALID_ENTRIES");
   }
 };
@@ -83,7 +79,6 @@ const deleteRecipe = async (req, res, next) => {
     // );
     return res.json(recipes);
   } catch (error) {
-    console.log(error.message);
     return next("RECIPE_NOT_DELETED");
   }
 };
@@ -116,7 +111,6 @@ const editRecipe = async (req, res) => {
       ]
     );
   } catch (error) {
-    console.log(error.message);
     return next("RECIPE_NOT_UPDATED");
   }
 
