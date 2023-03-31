@@ -6,7 +6,6 @@ const getCategories = async (req, res, next) => {
     const { rows: categories } = await pool.query("SELECT * FROM categories");
     res.json(categories);
   } catch (error) {
-    console.log(error.message);
     next("CATEGORY_NOT_FOUND");
   }
 };
@@ -27,37 +26,26 @@ const getCategory = async (req, res, next) => {
       return res.json({ error: "nothing found" });
     }
   } catch (error) {
-    console.log(error.message);
     return next("RECIPES_IN_CATEGORY_NOT_FOUND");
   }
 };
 
-
 const createCategory = async (req, res, next) => {
-    try {
-      const {
-        name
-      } = req.body;
-  
-      if (
-        !name
-  
-      ) {
-        throw Error();
-      }
-    
-      const { rows: newCategory } = await pool.query(
-      "INSERT INTO Categories (name) VALUES ($1) RETURNING *",
-      [
-        name,
-      ] //pg module checks the values
-      );
-      return res.status(201).json(newCategory);
-    } catch (error) {
-      console.log(error.message);
-      return next("CATEGORY_INVALID_ENTRIES");
-    }
-};
+  try {
+    const { name } = req.body;
 
+    if (!name) {
+      throw Error();
+    }
+
+    const { rows: newCategory } = await pool.query(
+      "INSERT INTO Categories (name) VALUES ($1) RETURNING *",
+      [name] //pg module checks the values
+    );
+    return res.status(201).json(newCategory);
+  } catch (error) {
+    return next("CATEGORY_INVALID_ENTRIES");
+  }
+};
 
 export { getCategories, getCategory, createCategory };
