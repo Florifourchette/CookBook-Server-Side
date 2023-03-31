@@ -14,6 +14,42 @@ app.use(Express.urlencoded({ extended: true }));
 app.use("/recipes/", recipesRoutes);
 app.use("/categories/", categoriesRoutes);
 
+app.use((error, req, res, next) => {
+  const errorMessages = [
+    "RECIPE_NOT_FOUND",
+    "RECIPE_INVALID_ENTRIES",
+    "RECIPE_NOT_DELETED",
+    "RECIPE_NOT_UPDATED",
+    "RECIPES_IN_CATEGORY_NOT_FOUND",
+    "CATEGORY_NOT_FOUND",
+  ];
+
+  if (errorMessages.includes(error)) {
+    switch (error) {
+      case "RECIPE_NOT_FOUND":
+        res.status(404).json("We could not find what you were looking for");
+        break;
+      case "RECIPE_INVALID_ENTRIES":
+        res.status(400).json("Invalid entries");
+        break;
+      case "RECIPE_NOT_DELETED":
+        res.status(400).json("This recipe does not exist");
+        break;
+      case "RECIPE_NOT_UPDATED":
+        res.status(400).json("Wrong input, please modify");
+        break;
+      case "CATEGORY_NOT_FOUND":
+        res.status(400).json("We cannot show you what you are waiting for 😥");
+        break;
+      case "RECIPES_IN_CATEGORY_NOT_FOUND":
+        res.status(404).json("We could not find any recipes for this category");
+        break;
+      default:
+        res.status(500).json("Contact administrator");
+    }
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
